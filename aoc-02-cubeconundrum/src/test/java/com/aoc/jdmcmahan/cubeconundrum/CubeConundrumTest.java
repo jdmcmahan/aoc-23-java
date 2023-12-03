@@ -24,7 +24,7 @@ class CubeConundrumTest {
 
             int result = parser.parse(input)
                     .filter(game -> game.possible(test))
-                    .mapToInt(Game::getId)
+                    .mapToInt(Game::id)
                     .sum();
 
             assertEquals(8, result);
@@ -44,7 +44,7 @@ class CubeConundrumTest {
 
             int result = parser.parse(input)
                     .filter(game -> game.possible(test))
-                    .mapToInt(Game::getId)
+                    .mapToInt(Game::id)
                     .sum();
 
             assertEquals(2879, result);
