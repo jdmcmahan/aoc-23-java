@@ -12,6 +12,7 @@
     <modules>
         <module>aoc-01-trebuchet</module>
         <module>aoc-02-cubeconundrum</module>
+        <module>aoc-03-gearratios</module>
     </modules>
 
     <properties>
