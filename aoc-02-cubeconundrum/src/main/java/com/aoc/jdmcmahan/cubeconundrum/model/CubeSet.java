@@ -1,9 +1,7 @@
 package com.aoc.jdmcmahan.cubeconundrum.model;
 
 import lombok.Builder;
-import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
 @Builder
 public record CubeSet(int redCount, int greenCount, int blueCount) {
 

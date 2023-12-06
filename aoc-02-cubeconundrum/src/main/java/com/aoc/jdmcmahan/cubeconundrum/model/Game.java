@@ -1,12 +1,10 @@
 package com.aoc.jdmcmahan.cubeconundrum.model;
 
 import lombok.Builder;
-import lombok.RequiredArgsConstructor;
 import lombok.Singular;
 
 import java.util.List;
 
-@RequiredArgsConstructor
 @Builder
 public record Game(int id, @Singular List<CubeSet> cubeSets) {
 
