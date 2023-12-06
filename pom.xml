@@ -14,6 +14,7 @@
         <module>aoc-02-cubeconundrum</module>
         <module>aoc-03-gearratios</module>
         <module>aoc-04-scratchcards</module>
+        <module>aoc-05-ifyougiveaseedafertilizer</module>
     </modules>
 
     <properties>
