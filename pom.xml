@@ -14,6 +14,7 @@
         <module>aoc-02-cubeconundrum</module>
         <module>aoc-03-gearratios</module>
         <module>aoc-04-scratchcards</module>
+        <module>aoc-05-ifyougiveaseedafertilizer</module>
     </modules>
 
     <properties>
@@ -39,6 +40,12 @@
                 <artifactId>lombok</artifactId>
                 <version>1.18.30</version>
             </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>2.15.1</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
                 <artifactId>junit-jupiter</artifactId>
