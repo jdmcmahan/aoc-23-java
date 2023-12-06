@@ -4,108 +4,76 @@ import java.util.*;
 
 public class Almanac {
 
-    private final TreeMap<Long, Seed> seeds = new TreeMap<>();
-    private final TreeMap<Long, Soil> soils = new TreeMap<>();
-    private final TreeMap<Long, Fertilizer> fertilizers = new TreeMap<>();
-    private final TreeMap<Long, Water> waters = new TreeMap<>();
-    private final TreeMap<Long, Light> lights = new TreeMap<>();
-    private final TreeMap<Long, Temperature> temperatures = new TreeMap<>();
-    private final TreeMap<Long, Humidity> humidities = new TreeMap<>();
-    private final TreeMap<Long, Location> locations = new TreeMap<>();
+    private final Set<Range> seedRanges = new HashSet<>();
+    private final Set<Range> soilRanges = new HashSet<>();
+    private final Set<Range> fertilizerRanges = new HashSet<>();
+    private final Set<Range> waterRanges = new HashSet<>();
+    private final Set<Range> lightRanges = new HashSet<>();
+    private final Set<Range> temperatureRanges = new HashSet<>();
+    private final Set<Range> humidityRanges = new HashSet<>();
+    private final Set<Range> locationRanges = new HashSet<>();
 
-    public Seed getSeed(long id) {
-        return seeds.get(id);
+    public Collection<Range> getSeedRanges() {
+        return Collections.unmodifiableCollection(seedRanges);
     }
 
-    public Collection<Seed> getSeeds() {
-        return Collections.unmodifiableCollection(seeds.values());
+    public void addSeedRange(Range seedRange) {
+        this.seedRanges.add(seedRange);
     }
 
-    public void addSeed(Seed seed) {
-        this.seeds.put(seed.getId(), seed);
+    public Collection<Range> getSoilRanges() {
+        return Collections.unmodifiableCollection(soilRanges);
     }
 
-    public Soil getSoil(long id) {
-        return soils.get(id);
+    public void addSoilRange(Range soilRange) {
+        this.soilRanges.add(soilRange);
     }
 
-    public Collection<Soil> getSoils() {
-        return Collections.unmodifiableCollection(soils.values());
+    public Collection<Range> getFertilizerRanges() {
+        return Collections.unmodifiableCollection(fertilizerRanges);
     }
 
-    public void addSoil(Soil soil) {
-        this.soils.put(soil.getId(), soil);
+    public void addFertilizerRange(Range fertilizerRange) {
+        this.fertilizerRanges.add(fertilizerRange);
     }
 
-    public Fertilizer getFertilizer(long id) {
-        return fertilizers.get(id);
+    public Collection<Range> getWaterRanges() {
+        return Collections.unmodifiableCollection(waterRanges);
     }
 
-    public Collection<Fertilizer> getFertilizers() {
-        return Collections.unmodifiableCollection(fertilizers.values());
+    public void addWaterRange(Range waterRange) {
+        this.waterRanges.add(waterRange);
     }
 
-    public void addFertilizer(Fertilizer fertilizer) {
-        this.fertilizers.put(fertilizer.getId(), fertilizer);
+    public Collection<Range> getLightRanges() {
+        return Collections.unmodifiableCollection(lightRanges);
     }
 
-    public Water getWater(long id) {
-        return waters.get(id);
+    public void addLightRange(Range lightRange) {
+        this.lightRanges.add(lightRange);
     }
 
-    public Collection<Water> getWaters() {
-        return Collections.unmodifiableCollection(waters.values());
+    public Collection<Range> getTemperatureRanges() {
+        return Collections.unmodifiableCollection(temperatureRanges);
     }
 
-    public void addWater(Water water) {
-        this.waters.put(water.getId(), water);
+    public void addTemperatureRange(Range temperatureRange) {
+        this.temperatureRanges.add(temperatureRange);
     }
 
-    public Light getLight(long id) {
-        return lights.get(id);
+    public Collection<Range> getHumidityRanges() {
+        return Collections.unmodifiableCollection(humidityRanges);
     }
 
-    public Collection<Light> getLights() {
-        return Collections.unmodifiableCollection(lights.values());
+    public void addHumidityRange(Range humidityRange) {
+        this.humidityRanges.add(humidityRange);
     }
 
-    public void addLight(Light light) {
-        this.lights.put(light.getId(), light);
+    public Collection<Range> getLocationRanges() {
+        return Collections.unmodifiableCollection(locationRanges);
     }
 
-    public Temperature getTemperature(long id) {
-        return temperatures.get(id);
-    }
-
-    public Collection<Temperature> getTemperatures() {
-        return Collections.unmodifiableCollection(temperatures.values());
-    }
-
-    public void addTemperature(Temperature temperature) {
-        this.temperatures.put(temperature.getId(), temperature);
-    }
-
-    public Humidity getHumidity(long id) {
-        return humidities.get(id);
-    }
-
-    public Collection<Humidity> getHumidities() {
-        return Collections.unmodifiableCollection(humidities.values());
-    }
-
-    public void addHumidity(Humidity humidity) {
-        this.humidities.put(humidity.getId(), humidity);
-    }
-
-    public Location getLocation(long id) {
-        return locations.get(id);
-    }
-
-    public Collection<Location> getLocations() {
-        return Collections.unmodifiableCollection(locations.values());
-    }
-
-    public void addLocation(Location location) {
-        this.locations.put(location.getId(), location);
+    public void addLocationRange(Range locationRange) {
+        this.locationRanges.add(locationRange);
     }
 }

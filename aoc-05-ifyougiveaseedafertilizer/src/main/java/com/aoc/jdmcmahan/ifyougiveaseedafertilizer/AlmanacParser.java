@@ -1,23 +1,23 @@
 package com.aoc.jdmcmahan.ifyougiveaseedafertilizer;
 
-import com.aoc.jdmcmahan.ifyougiveaseedafertilizer.model.*;
+import com.aoc.jdmcmahan.ifyougiveaseedafertilizer.model.Almanac;
+import com.aoc.jdmcmahan.ifyougiveaseedafertilizer.model.Range;
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.function.BiConsumer;
-import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class AlmanacParser {
 
     private static final Pattern SEEDS_PATTERN = Pattern.compile("seeds: ([\\d\\s]+)");
 
-    public Almanac parse(InputStream input) throws IOException {
+    public Almanac parse(InputStream input, SeedRangeParser seedRangeParser) throws IOException {
         String document = IOUtils.toString(input, StandardCharsets.UTF_8);
 
         Matcher seedsMatcher = SEEDS_PATTERN.matcher(document);
@@ -26,43 +26,39 @@ public class AlmanacParser {
         }
 
         Almanac almanac = new Almanac();
-        Arrays.stream(seedsMatcher.group(1).split("\\s+"))
-                .map(Long::valueOf)
-                .map(Seed::new)
-                .forEach(almanac::addSeed);
 
-        Map<Seed, Long> seedToSoilMappings = this.parseMappings("seed-to-soil map:", document, almanac.getSeeds());
-        this.applyMappings(seedToSoilMappings, Soil::new, Seed::setSoil)
-                .forEach(almanac::addSoil);
+        long[] seedRangeValues = Arrays.stream(seedsMatcher.group(1).split("\\s+"))
+                .mapToLong(Long::parseLong)
+                .toArray();
 
-        Map<Soil, Long> soilToFertilizerMappings = this.parseMappings("soil-to-fertilizer map:", document, almanac.getSoils());
-        this.applyMappings(soilToFertilizerMappings, Fertilizer::new, Soil::setFertilizer)
-                .forEach(almanac::addFertilizer);
+        seedRangeParser.parseSeedRanges(seedRangeValues)
+                .forEach(almanac::addSeedRange);
 
-        Map<Fertilizer, Long> fertilizerToWaterMappings = this.parseMappings("fertilizer-to-water map:", document, almanac.getFertilizers());
-        this.applyMappings(fertilizerToWaterMappings, Water::new, Fertilizer::setWater)
-                .forEach(almanac::addWater);
+        this.parseMappings("seed-to-soil map:", document, almanac.getSeedRanges())
+                .forEach(almanac::addSoilRange);
 
-        Map<Water, Long> waterToLightMappings = this.parseMappings("water-to-light map:", document, almanac.getWaters());
-        this.applyMappings(waterToLightMappings, Light::new, Water::setLight)
-                .forEach(almanac::addLight);
+        this.parseMappings("soil-to-fertilizer map:", document, almanac.getSoilRanges())
+                .forEach(almanac::addFertilizerRange);
 
-        Map<Light, Long> lightToTemperatureMappings = this.parseMappings("light-to-temperature map:", document, almanac.getLights());
-        this.applyMappings(lightToTemperatureMappings, Temperature::new, Light::setTemperature)
-                .forEach(almanac::addTemperature);
+        this.parseMappings("fertilizer-to-water map:", document, almanac.getFertilizerRanges())
+                .forEach(almanac::addWaterRange);
 
-        Map<Temperature, Long> temperatureToHumidityMappings = this.parseMappings("temperature-to-humidity map:", document, almanac.getTemperatures());
-        this.applyMappings(temperatureToHumidityMappings, Humidity::new, Temperature::setHumidity)
-                .forEach(almanac::addHumidity);
+        this.parseMappings("water-to-light map:", document, almanac.getWaterRanges())
+                .forEach(almanac::addLightRange);
 
-        Map<Humidity, Long> humidityToLocationMappings = this.parseMappings("humidity-to-location map:", document, almanac.getHumidities());
-        this.applyMappings(humidityToLocationMappings, Location::new, Humidity::setLocation)
-                .forEach(almanac::addLocation);
+        this.parseMappings("light-to-temperature map:", document, almanac.getLightRanges())
+                .forEach(almanac::addTemperatureRange);
+
+        this.parseMappings("temperature-to-humidity map:", document, almanac.getTemperatureRanges())
+                .forEach(almanac::addHumidityRange);
+
+        this.parseMappings("humidity-to-location map:", document, almanac.getHumidityRanges())
+                .forEach(almanac::addLocationRange);
 
         return almanac;
     }
 
-    protected <S extends Category> Map<S, Long> parseMappings(String header, String document, Collection<S> sources) {
+    protected Set<Range> parseMappings(String header, String document, Collection<Range> sources) {
         Pattern pattern = Pattern.compile(header + "\\n([\\d\\s]+)\\n");
         Matcher matcher = pattern.matcher(document);
 
@@ -72,8 +68,8 @@ public class AlmanacParser {
 
         String lines = matcher.group(1);
 
-        List<S> queue = new LinkedList<>(sources);
-        Map<S, Long> mappings = new HashMap<>();
+        List<Range> queue = new LinkedList<>(sources);
+        Set<Range> mappings = new HashSet<>();
 
         Scanner scanner = new Scanner(lines);
         while (scanner.hasNextLine()) {
@@ -84,39 +80,62 @@ public class AlmanacParser {
             long sourceStart = Long.parseLong(tokens[1]);
             long length = Long.parseLong(tokens[2]);
 
-            for (ListIterator<S> iterator = queue.listIterator(); iterator.hasNext(); ) {
-                S current = iterator.next();
-                long sourceId = current.getId();
+            Range mappingRange = new Range(sourceStart, sourceStart + length - 1);
 
-                if (sourceId < sourceStart || sourceId >= sourceStart + length) {
+            for (ListIterator<Range> iterator = queue.listIterator(); iterator.hasNext(); ) {
+                Range current = iterator.next();
+                Range sourceOverlap = current.intersection(mappingRange);
+
+                if (sourceOverlap == null) {
                     continue;
                 }
 
-                long destinationId = destinationStart + (sourceId - sourceStart);
-                mappings.put(current, destinationId);
+                long offset = sourceOverlap.lowerBound() - sourceStart;
+                Range destination = new Range(destinationStart + offset, destinationStart + offset + sourceOverlap.length() - 1);
+                mappings.add(destination);
 
                 iterator.remove();
+
+                for (Range leftover : current.difference(sourceOverlap)) {
+                    iterator.add(leftover);
+                }
             }
         }
 
-        for (S remaining : queue) {
-            mappings.put(remaining, remaining.getId());
+        for (Range remaining : queue) {
+            mappings.add(new Range(remaining));
         }
 
         return mappings;
     }
 
-    protected <S extends Category, D extends Category> Collection<D> applyMappings(Map<S, Long> mappings, Function<Long, D> destinationCreator, BiConsumer<S, D> mapper) {
-        return mappings.entrySet().stream()
-                .map(entry -> {
-                    S source = entry.getKey();
-                    Long destinationId = entry.getValue();
+    public interface SeedRangeParser {
 
-                    D destination = destinationCreator.apply(destinationId);
-                    mapper.accept(source, destination);
+        Collection<Range> parseSeedRanges(long... values);
+    }
 
-                    return destination;
-                })
-                .collect(Collectors.toList());
+    public static class SingleSeedRangeParser implements SeedRangeParser {
+
+        @Override
+        public Collection<Range> parseSeedRanges(long... values) {
+            return Arrays.stream(values)
+                    .mapToObj(value -> new Range(value, value))
+                    .collect(Collectors.toList());
+        }
+    }
+
+    public static class BountifulSeedRangeParser implements SeedRangeParser {
+
+        @Override
+        public Collection<Range> parseSeedRanges(long... values) {
+            return IntStream.iterate(0, i -> i < values.length - 1, i -> i + 2)
+                    .mapToObj(i -> {
+                        long lowerBound = values[i];
+                        long length = values[i + 1];
+
+                        return new Range(lowerBound, lowerBound + length - 1);
+                    })
+                    .collect(Collectors.toList());
+        }
     }
 }
