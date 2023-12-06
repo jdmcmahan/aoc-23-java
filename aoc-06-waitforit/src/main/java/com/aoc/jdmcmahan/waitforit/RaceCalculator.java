@@ -4,7 +4,7 @@ import com.aoc.jdmcmahan.waitforit.model.Race;
 
 public class RaceCalculator {
 
-    protected int winningOptions(Race race) {
+    public int winningOptions(Race race) {
         // quadratic formula (thanks kwalker314!)
         long time = race.time();
         long winningDistance = race.recordDistance() + 1;
