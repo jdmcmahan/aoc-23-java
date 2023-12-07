@@ -16,6 +16,7 @@
         <module>aoc-04-scratchcards</module>
         <module>aoc-05-ifyougiveaseedafertilizer</module>
         <module>aoc-06-waitforit</module>
+        <module>aoc-07-camelcards</module>
     </modules>
 
     <properties>
