@@ -18,6 +18,7 @@
         <module>aoc-06-waitforit</module>
         <module>aoc-07-camelcards</module>
         <module>aoc-08-hauntedwasteland</module>
+        <module>aoc-09-miragemaintenance</module>
     </modules>
 
     <properties>
