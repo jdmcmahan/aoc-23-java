@@ -20,6 +20,7 @@
         <module>aoc-08-hauntedwasteland</module>
         <module>aoc-09-miragemaintenance</module>
         <module>aoc-10-pipemaze</module>
+        <module>aoc-11-cosmicexpansion</module>
     </modules>
 
     <properties>
