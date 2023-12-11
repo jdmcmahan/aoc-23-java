@@ -1,14 +1,12 @@
 package com.aoc.jdmcmahan.pipemaze.model;
 
 import lombok.Builder;
-import lombok.RequiredArgsConstructor;
 import lombok.Singular;
 
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
 public class PipeMaze {
 
     private final Pipe start;
@@ -38,13 +36,12 @@ public class PipeMaze {
     }
 
     public int area() {
-        List<Pipe> loop = new LinkedList<>(this.loop());
-        loop.add(this.start);
+        List<Pipe> loop = this.loop();
 
         int doubleArea = 0;
-        for (int i = 1; i < loop.size(); i++) {
+        for (int i = 1; i <= loop.size(); i++) {
             Pipe previous = loop.get(i - 1);
-            Pipe current = loop.get(i);
+            Pipe current = loop.get(i % loop.size());
 
             doubleArea += (previous.getPosition().getX() * current.getPosition().getY()) - (previous.getPosition().getY() * current.getPosition().getX());
         }
