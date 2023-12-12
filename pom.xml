@@ -21,6 +21,7 @@
         <module>aoc-09-miragemaintenance</module>
         <module>aoc-10-pipemaze</module>
         <module>aoc-11-cosmicexpansion</module>
+        <module>aoc-12-hotsprings</module>
     </modules>
 
     <properties>
