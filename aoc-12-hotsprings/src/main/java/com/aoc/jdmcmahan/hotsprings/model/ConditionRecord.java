@@ -73,8 +73,8 @@ public record ConditionRecord(String condition, @Singular List<Integer> groups) 
             CACHE.put(cacheKey, arrangements);
             return arrangements;
         }
-    }
 
-    protected record CacheKey(String record, List<Integer> groups) {
+        protected record CacheKey(String record, List<Integer> groups) {
+        }
     }
 }
