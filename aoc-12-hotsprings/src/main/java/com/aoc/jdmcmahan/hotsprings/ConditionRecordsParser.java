@@ -6,11 +6,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.StringJoiner;
 
 public class ConditionRecordsParser {
 
-    public List<ConditionRecord> parse(InputStream input) {
+    public List<ConditionRecord> parse(InputStream input, int folds) {
         LineNumberReader reader = new LineNumberReader(new InputStreamReader(input));
 
         return reader.lines()
@@ -28,6 +30,21 @@ public class ConditionRecordsParser {
                             .forEach(builder::group);
 
                     return builder.build();
+                })
+                .map(record -> {
+                    if (folds == 0) {
+                        return record;
+                    }
+
+                    StringJoiner conditionJoiner = new StringJoiner("?");
+                    List<Integer> groups = new LinkedList<>();
+
+                    for (int i = 0; i < folds; i++) {
+                        conditionJoiner.add(record.condition());
+                        groups.addAll(record.groups());
+                    }
+
+                    return new ConditionRecord(conditionJoiner.toString(), groups);
                 })
                 .toList();
     }
