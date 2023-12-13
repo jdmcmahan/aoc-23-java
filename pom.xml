@@ -22,6 +22,7 @@
         <module>aoc-10-pipemaze</module>
         <module>aoc-11-cosmicexpansion</module>
         <module>aoc-12-hotsprings</module>
+        <module>aoc-13-pointofincidence</module>
     </modules>
 
     <properties>
