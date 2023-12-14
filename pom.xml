@@ -23,6 +23,7 @@
         <module>aoc-11-cosmicexpansion</module>
         <module>aoc-12-hotsprings</module>
         <module>aoc-13-pointofincidence</module>
+        <module>aoc-14-parabolicreflectordish</module>
     </modules>
 
     <properties>
