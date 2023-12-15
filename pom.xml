@@ -24,6 +24,7 @@
         <module>aoc-12-hotsprings</module>
         <module>aoc-13-pointofincidence</module>
         <module>aoc-14-parabolicreflectordish</module>
+        <module>aoc-15-lenslibrary</module>
     </modules>
 
     <properties>
