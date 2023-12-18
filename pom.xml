@@ -27,6 +27,7 @@
         <module>aoc-15-lenslibrary</module>
         <module>aoc-16-thefloorwillbelava</module>
         <module>aoc-17-clumsycrucible</module>
+        <module>aoc-18-lavaductlagoon</module>
     </modules>
 
     <properties>
